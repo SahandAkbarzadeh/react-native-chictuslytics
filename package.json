@@ -1,6 +1,6 @@
 {
   "name": "react-native-react-native-chictuslytics",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -16,6 +16,7 @@
     "react-native-windows": "0.41.0-rc.1"
   },
   "dependencies": {
+    "react-native": "^0.57.8",
     "react-native-exception-handler": "^2.10.2",
     "react-native-photo-editor": "0.0.7",
     "react-native-restart": "0.0.7",
