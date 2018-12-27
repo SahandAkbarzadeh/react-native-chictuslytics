@@ -3,6 +3,7 @@ import React, { Component } from "react";
 import { setJSExceptionHandler, setNativeExceptionHandler } from 'react-native-exception-handler';
 import Server, { REPORT_TYPES } from "./server";
 import { captureScreen } from "react-native-view-shot";
+import DeviceInfo from 'react-native-device-info';
 
 /*
 
@@ -35,7 +36,7 @@ export default class ChictusLytics extends Component {
     Server.setConfigs(this.props.configs);
     const handleExceptions = (err, isFatal) => {
       this.setState({ state: STATES.CRASH, working: true });
-      Server.add("Crash Report " + this.props.titleExtraInformation(),this.getDeviceInfo() + "\n" + this.props.extraInformation(), REPORT_TYPES.CRASH, (data) => {
+      Server.add("Crash Report " + DeviceInfo.getSystemName() + ' ' + DeviceInfo.getSystemVersion() + ' on ' + DeviceInfo.getVersion + ' '+ this.props.titleExtraInformation(),this.getDeviceInfo() + "\n" + this.props.extraInformation(), REPORT_TYPES.CRASH, (data) => {
         if (data.reportId === "") {
           this.setState({ working: false })
         } else {
@@ -49,7 +50,34 @@ export default class ChictusLytics extends Component {
   }
 
   getDeviceInfo() {
-    return ""
+    return '' +
+      `# Device info` +
+      `` +
+      ` - \`Api Level\`: ${DeviceInfo.getAPILevel()}` +
+      ` - \`App Name\` : ${DeviceInfo.getApplicationName()}` +
+      ` - \`brand\`: ${DeviceInfo.getBrand()}` +
+      ` - \`build number\`: ${DeviceInfo.getBuildNumber()}` +
+      ` - \`bundle id\`: ${DeviceInfo.getBundleId()}` +
+      ` - \`carrier\`: ${DeviceInfo.getCarrier()}` +
+      ` - \`device country\`: ${DeviceInfo.getDeviceCountry()}` +
+      ` - \`device id\`: ${DeviceInfo.getDeviceId()}` +
+      ` - \`device locale\`: ${DeviceInfo.getDeviceLocale()}` +
+      ` - \`device name\`: ${DeviceInfo.getDeviceName()}` +
+      ` - \`first time\`: ${DeviceInfo.getFirstInstallTime()}` +
+      ` - \`font scale\`: ${DeviceInfo.getFontScale()}` +
+      ` - \`instance id\`: ${DeviceInfo.getInstanceID()}` +
+      ` - \`install referrer\`: ${DeviceInfo.getInstallReferrer()}` +
+      ` - \`version\`: ${DeviceInfo.getVersion()}` +
+      ` - \`user agent\`: ${DeviceInfo.getUserAgent()}` +
+      ` - \`unique id\`: ${DeviceInfo.getUniqueID()}` +
+      ` - \`free storage\`: ${DeviceInfo.getFreeDiskStorage()}` +
+      ` - \`last update time\`: ${DeviceInfo.getLastUpdateTime()}` +
+      ` - \`manufacturer\`: ${DeviceInfo.getManufacturer()}` +
+      ` - \`system name\`: ${DeviceInfo.getSystemName()}` +
+      ` - \`system version\`: ${DeviceInfo.getSystemVersion()}` +
+      ` - \`phone number\`: ${DeviceInfo.getPhoneNumber()}` +
+      ` - \`readable version\`: ${DeviceInfo.getReadableVersion()}` +
+      ``
   }
 
   sendReport() {

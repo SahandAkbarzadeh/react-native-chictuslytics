@@ -16,6 +16,7 @@
     "react-native-windows": "0.41.0-rc.1"
   },
   "dependencies": {
+    "react-native-device-info": "^0.24.3",
     "react-native-exception-handler": "^2.10.2",
     "react-native-view-shot": "^2.5.0"
   }
