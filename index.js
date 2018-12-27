@@ -1,7 +1,9 @@
-import {NativeModules, View, Text, ActivityIndicator} from 'react-native';
+import {NativeModules, View, Text, ActivityIndicator, Image} from 'react-native';
 import React, {Component} from "react";
 import {setJSExceptionHandler, setNativeExceptionHandler} from 'react-native-exception-handler';
 import Server, {REPORT_TYPES} from "./server";
+import RNShake from 'react-native-shake';
+import { captureScreen } from "react-native-view-shot";
 
 /*
 
@@ -26,6 +28,7 @@ export default class ChictusLytics extends Component {
     this.state = {
       state: STATES.NORMAL,
       working: false,
+      image: null,
     };
     Server.setUrl(this.props.server);
     Server.setConfigs(this.props.configs);
@@ -42,12 +45,39 @@ export default class ChictusLytics extends Component {
       })
     };
     setJSExceptionHandler(handleExceptions, this.props.enableDevCrashReport);
+    if (__DEV__ || this.props.enableReleaseShakeToReport) {
+      this.setupShakeToReport()
+    }
+  }
+
+  setupShakeToReport() {
+    RNShake.addEventListener('ShakeEvent', () => {
+      captureScreen({
+        format: "jpg",
+        quality: 0.9
+      })
+        .then(
+          uri => {
+            this.setState({
+              state: STATES.REPORT,
+              image: uri
+            })
+          },
+          error => {
+            throw error
+          }
+        );
+    });
+  }
+
+  componentWillUnmount() {
+    RNShake.removeEventListener('ShakeEvent');
   }
 
   render() {
     return (
       <View style={{width: '100%', height: '100%'}}>
-        {this.state.state === STATES.NORMAL && (this.props.children)}
+        {(this.state.state === STATES.NORMAL || this.state.state === STATES.REPORT) && (this.props.children)}
         {this.state.state === STATES.CRASH && (
           <View style={{
             width: '100%',
@@ -65,6 +95,21 @@ export default class ChictusLytics extends Component {
             <View style={{width: 10, height: 10}}/>
             {this.state.working &&
             <ActivityIndicator/>
+            }
+            {this.state.state === STATES.REPORT &&
+            <View style={{
+              width: '100%',
+              height: '100%',
+              position: 'absolute',
+              padding: 40
+            }}>
+              <Image
+                style={{flex: 1}}
+                resizeMode={'contain'}
+                source={{uri: this.state.image}}
+              />
+
+            </View>
             }
           </View>
         )}
