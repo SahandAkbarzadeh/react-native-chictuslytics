@@ -1,5 +1,5 @@
 
-import { NativeModules } from 'react-native';
+import { NativeModules, View } from 'react-native';
 import React, { Component } from "react";
 
 
