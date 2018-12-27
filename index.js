@@ -28,7 +28,7 @@ export default class ChictusLytics extends Component {
       state: STATES.NORMAL,
       working: false,
       image: null,
-      bugReportEnabled: false,
+      bugReportEnabled: __DEV__ || this.props.enableBugReportForRelease,
     };
     Server.setUrl(this.props.server);
     Server.setConfigs(this.props.configs);
@@ -44,10 +44,7 @@ export default class ChictusLytics extends Component {
         }
       })
     };
-    setJSExceptionHandler(handleExceptions, this.props.enableBugReportForRelease);
-    if (__DEV__ || this.props.enableReleaseShakeToReport) {
-      this.setState({bugReportEnabled: true})
-    }
+    setJSExceptionHandler(handleExceptions, this.props.enableDevCrashReport);
   }
 
   capture() {
@@ -74,31 +71,32 @@ export default class ChictusLytics extends Component {
     return (
       <View style={{width: '100%', height: '100%'}}>
         {(this.state.state === STATES.NORMAL || this.state.state === STATES.REPORT) && (this.props.children)}
-        {this.state.bugReportEnabled &&
+        {this.state.bugReportEnabled && this.state.state !== STATES.CRASH ? (
         <TouchableOpacity
           onPress={() => this.capture() }
           style={{
           backgroundColor: 'red',
-          width:50,
-          height:50,
-          opacity: 0.3,
+          width:40,
+          height:40,
+          opacity: 0.1,
+          borderRadius: 20,
           position: 'absolute',
-          left: 50,
-          top: 5
-        }}/>
+          left: 70,
+          top: 10,
+          zIndex: 1000
+        } }/>) : null
         }
         {this.state.state === STATES.CRASH && (
           <View style={{
             width: '100%',
             height: '100%',
             justifyContent: 'center',
-            alignContent: 'center',
-            flexDirection: 'row'
+            alignContent: 'center'
           }}>
             <Text style={{textAlign: 'center'}}>
               {"مشکلی پیش آمده است!"}
             </Text>
-            <Text>
+            <Text style={{textAlign: 'center'}}>
               {this.state.working ? 'در حال ارسال خطا به سرور برای رفع مشکل...' : 'از اتفاق پیش آمده متاسفیم لطفا نرم افزار را مجددا باز کنید.'}
             </Text>
             <View style={{width: 10, height: 10}}/>
