@@ -8,7 +8,7 @@ export const REPORT_TYPES = {
 };
 
 const HEADERS = {
-  'Content-Type': 'application/jsn;charset=UTF-8',
+  'content-type': 'application/json',
   'User-Agent': 'ChictusLytics'
 };
 

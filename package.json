@@ -17,8 +17,8 @@
   },
   "dependencies": {
     "react-native-exception-handler": "^2.10.2",
-    "react-native-photo-editor": "0.0.7",
-    "react-native-restart": "0.0.7",
+    "react-native-exit-app": "^1.0.0",
+    "react-native-shake": "^3.2.4",
     "react-native-view-shot": "^2.5.0"
   }
 }
