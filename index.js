@@ -1,9 +1,8 @@
-import {NativeModules, View, Text, ActivityIndicator, Image} from 'react-native';
+import {NativeModules, View, Text, ActivityIndicator, Image, TouchableOpacity} from 'react-native';
 import React, {Component} from "react";
 import {setJSExceptionHandler, setNativeExceptionHandler} from 'react-native-exception-handler';
 import Server, {REPORT_TYPES} from "./server";
-import RNShake from 'react-native-shake';
-import { captureScreen } from "react-native-view-shot";
+import {captureScreen} from "react-native-view-shot";
 
 /*
 
@@ -19,7 +18,7 @@ const STATES = {
   REPORT: 2
 };
 
-// props: enableDevCrashReport, enableReleaseShakeToReport, server, configs
+// props: enableDevCrashReport, enableBugReportForRelease, server, configs
 
 export default class ChictusLytics extends Component {
 
@@ -29,6 +28,7 @@ export default class ChictusLytics extends Component {
       state: STATES.NORMAL,
       working: false,
       image: null,
+      bugReportEnabled: false,
     };
     Server.setUrl(this.props.server);
     Server.setConfigs(this.props.configs);
@@ -44,40 +44,48 @@ export default class ChictusLytics extends Component {
         }
       })
     };
-    setJSExceptionHandler(handleExceptions, this.props.enableDevCrashReport);
+    setJSExceptionHandler(handleExceptions, this.props.enableBugReportForRelease);
     if (__DEV__ || this.props.enableReleaseShakeToReport) {
-      this.setupShakeToReport()
+      this.setupBugReport();
+      this.setState({bugReportEnabled: true})
     }
   }
 
-  setupShakeToReport() {
-    RNShake.addEventListener('ShakeEvent', () => {
-      captureScreen({
-        format: "jpg",
-        quality: 0.9
-      })
-        .then(
-          uri => {
-            this.setState({
-              state: STATES.REPORT,
-              image: uri
-            })
-          },
-          error => {
-            throw error
-          }
-        );
-    });
-  }
+  setupBugReport() {
 
-  componentWillUnmount() {
-    RNShake.removeEventListener('ShakeEvent');
+    captureScreen({
+      format: "jpg",
+      quality: 0.9
+    })
+      .then(
+        uri => {
+          this.setState({
+            state: STATES.REPORT,
+            image: uri
+          })
+        },
+        error => {
+          throw error
+        }
+      );
+
   }
 
   render() {
     return (
       <View style={{width: '100%', height: '100%'}}>
         {(this.state.state === STATES.NORMAL || this.state.state === STATES.REPORT) && (this.props.children)}
+        {this.state.bugReportEnabled &&
+        <TouchableOpacity style={{
+          backgroundColor: 'red',
+          width:50,
+          height:50,
+          opacity: 0.3,
+          position: 'absolute',
+          left: 50,
+          top: 5
+        }}/>
+        }
         {this.state.state === STATES.CRASH && (
           <View style={{
             width: '100%',
@@ -121,7 +129,7 @@ export default class ChictusLytics extends Component {
 
 ChictusLytics.defaultProps = {
   enableDevCrashReport: false,
-  enableReleaseShakeToReport: false,
+  enableBugReportForRelease: false,
   extraInformation: () => {
     return ""
   },
