@@ -13,7 +13,7 @@ export default class ChictusLytics extends Component {
 
   render() {
     return (
-      <View>
+      <View style={{width: '100%', height: '100%'}}>
         {this.props.children}
       </View>
     )
