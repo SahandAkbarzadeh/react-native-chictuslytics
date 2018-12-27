@@ -35,7 +35,7 @@ export default class ChictusLytics extends Component {
         if (data.reportId === "") {
           RNExitApp.exitApp();
         } else {
-          Server.add_text_attachment(data.reportId, err, REPORT_TYPES.CRASH, () => {
+          Server.add_text_attachment(data.reportId, JSON.stringify(err), REPORT_TYPES.CRASH, () => {
             RNExitApp.exitApp();
           })
         }
