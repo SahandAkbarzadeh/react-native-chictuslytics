@@ -46,12 +46,11 @@ export default class ChictusLytics extends Component {
     };
     setJSExceptionHandler(handleExceptions, this.props.enableBugReportForRelease);
     if (__DEV__ || this.props.enableReleaseShakeToReport) {
-      this.setupBugReport();
       this.setState({bugReportEnabled: true})
     }
   }
 
-  setupBugReport() {
+  capture() {
 
     captureScreen({
       format: "jpg",
@@ -76,7 +75,9 @@ export default class ChictusLytics extends Component {
       <View style={{width: '100%', height: '100%'}}>
         {(this.state.state === STATES.NORMAL || this.state.state === STATES.REPORT) && (this.props.children)}
         {this.state.bugReportEnabled &&
-        <TouchableOpacity style={{
+        <TouchableOpacity
+          onPress={() => this.capture() }
+          style={{
           backgroundColor: 'red',
           width:50,
           height:50,
