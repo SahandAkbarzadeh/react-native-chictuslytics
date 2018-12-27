@@ -24,19 +24,19 @@ class Server {
       method: 'POST',
       headers: HEADERS,
       body: JSON.stringify({
-        title,description,
+        title, description,
         "config": type === REPORT_TYPES.CRASH ? _crashConfig : _reportConfig
       })
     }).then(response => {
       if (response.status === 200) {
-        response.json().then(data=> {
+        response.json().then(data => {
           callback(data)
         })
       } else {
-        callback({"reportId": ""})
+        callback({ "reportId": "" })
       }
     }).catch((e) => {
-      callback({"reportId": ""})
+      callback({ "reportId": "" })
     })
   }
 
@@ -45,20 +45,39 @@ class Server {
       method: 'POST',
       headers: HEADERS,
       body: JSON.stringify({
-        reportId,string,
+        reportId, string,
         "config": type === REPORT_TYPES.CRASH ? _crashConfig : _reportConfig
       })
     }).then(response => {
-      if (response.status === 200) {
-        response.json().then(data=> {
-          callback()
-        })
-      } else {
-        callback()
-      }
+      callback()
     }).catch((e) => {
       callback()
     })
+  }
+
+  static add_attachment(reportId,image, type, callback) {
+    const data = new FormData();
+    let params = {
+        'reportId': reportId,
+        'config': type === REPORT_TYPES.CRASH ? _crashConfig : _reportConfig
+    }
+    data.append('attachment', {
+      uri: image,
+      type: 'image/jpeg', // or photo.type
+      name: 'screenshot.jpeg'
+    });
+    fetch(_url + '/report/add_attachment?' +  Object.keys(params).map(key => key + '=' + params[key]).join('&'), {
+      method: 'post',
+      body: data,
+      headers: {
+        'content-type': 'multipart/form-data',
+        'User-Agent': 'ChictusLytics'
+      }
+    }).then(res => {
+      callback()
+    }).catch(e=> {
+      callback()
+    });
   }
 
 }
