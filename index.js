@@ -52,31 +52,30 @@ export default class ChictusLytics extends Component {
   getDeviceInfo() {
     return '' +
       `# Device info` +
-      `` +
-      ` - \`Api Level\`: ${DeviceInfo.getAPILevel()}` +
-      ` - \`App Name\` : ${DeviceInfo.getApplicationName()}` +
-      ` - \`brand\`: ${DeviceInfo.getBrand()}` +
-      ` - \`build number\`: ${DeviceInfo.getBuildNumber()}` +
-      ` - \`bundle id\`: ${DeviceInfo.getBundleId()}` +
-      ` - \`carrier\`: ${DeviceInfo.getCarrier()}` +
-      ` - \`device country\`: ${DeviceInfo.getDeviceCountry()}` +
-      ` - \`device id\`: ${DeviceInfo.getDeviceId()}` +
-      ` - \`device locale\`: ${DeviceInfo.getDeviceLocale()}` +
-      ` - \`device name\`: ${DeviceInfo.getDeviceName()}` +
-      ` - \`first time\`: ${DeviceInfo.getFirstInstallTime()}` +
-      ` - \`font scale\`: ${DeviceInfo.getFontScale()}` +
-      ` - \`instance id\`: ${DeviceInfo.getInstanceID()}` +
-      ` - \`install referrer\`: ${DeviceInfo.getInstallReferrer()}` +
-      ` - \`version\`: ${DeviceInfo.getVersion()}` +
-      ` - \`user agent\`: ${DeviceInfo.getUserAgent()}` +
-      ` - \`unique id\`: ${DeviceInfo.getUniqueID()}` +
-      ` - \`free storage\`: ${DeviceInfo.getFreeDiskStorage()}` +
-      ` - \`last update time\`: ${DeviceInfo.getLastUpdateTime()}` +
-      ` - \`manufacturer\`: ${DeviceInfo.getManufacturer()}` +
-      ` - \`system name\`: ${DeviceInfo.getSystemName()}` +
-      ` - \`system version\`: ${DeviceInfo.getSystemVersion()}` +
-      ` - \`phone number\`: ${DeviceInfo.getPhoneNumber()}` +
-      ` - \`readable version\`: ${DeviceInfo.getReadableVersion()}` +
+      `\n - \`Api Level\`: ${DeviceInfo.getAPILevel()}` +
+      `\n - \`App Name\` : ${DeviceInfo.getApplicationName()}` +
+      `\n - \`brand\`: ${DeviceInfo.getBrand()}` +
+      `\n - \`build number\`: ${DeviceInfo.getBuildNumber()}` +
+      `\n - \`bundle id\`: ${DeviceInfo.getBundleId()}` +
+      `\n - \`carrier\`: ${DeviceInfo.getCarrier()}` +
+      `\n - \`device country\`: ${DeviceInfo.getDeviceCountry()}` +
+      `\n - \`device id\`: ${DeviceInfo.getDeviceId()}` +
+      `\n - \`device locale\`: ${DeviceInfo.getDeviceLocale()}` +
+      `\n - \`device name\`: ${DeviceInfo.getDeviceName()}` +
+      `\n - \`first time\`: ${DeviceInfo.getFirstInstallTime()}` +
+      `\n - \`font scale\`: ${DeviceInfo.getFontScale()}` +
+      `\n - \`instance id\`: ${DeviceInfo.getInstanceID()}` +
+      `\n - \`install referrer\`: ${DeviceInfo.getInstallReferrer()}` +
+      `\n - \`version\`: ${DeviceInfo.getVersion()}` +
+      `\n - \`user agent\`: ${DeviceInfo.getUserAgent()}` +
+      `\n - \`unique id\`: ${DeviceInfo.getUniqueID()}` +
+      `\n - \`free storage\`: ${DeviceInfo.getFreeDiskStorage()}` +
+      `\n - \`last update time\`: ${DeviceInfo.getLastUpdateTime()}` +
+      `\n - \`manufacturer\`: ${DeviceInfo.getManufacturer()}` +
+      `\n - \`system name\`: ${DeviceInfo.getSystemName()}` +
+      `\n - \`system version\`: ${DeviceInfo.getSystemVersion()}` +
+      `\n - \`phone number\`: ${DeviceInfo.getPhoneNumber()}` +
+      `\n - \`readable version\`: ${DeviceInfo.getReadableVersion()}` +
       ``
   }
 
