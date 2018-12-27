@@ -1,7 +1,14 @@
 import {NativeModules, View, Text, ActivityIndicator} from 'react-native';
 import React, {Component} from "react";
 import {setJSExceptionHandler, setNativeExceptionHandler} from 'react-native-exception-handler';
+import Server, {REPORT_TYPES} from "./server";
+import RNRestart from 'react-native-restart';
 
+/*
+
+    THIS IS AN EXPERIMENTAL IMPL OF ChictusLytics!
+
+ */
 
 const {RNReactNativeChictuslytics} = NativeModules;
 
@@ -11,7 +18,7 @@ const STATES = {
   REPORT: 2
 };
 
-// props: enableCrashReport, enableShakeToReport
+// props: enableDevCrashReport, enableReleaseShakeToReport, server, configs
 
 export default class ChictusLytics extends Component {
 
@@ -20,11 +27,21 @@ export default class ChictusLytics extends Component {
     this.state = {
       state: STATES.NORMAL
     };
+    Server.setUrl(this.props.server);
+    Server.setConfigs(this.props.configs);
     const handleExceptions = (err, isFatal) => {
-      this.setState({state: STATES.CRASH})
+      this.setState({state: STATES.CRASH});
+      Server.add("Crash Report " + this.props.titleExtraInformation(), "\n" + this.props.extraInformation(), REPORT_TYPES.CRASH, (data)=> {
+        if (data.reportId == null) {
+          RNRestart.Restart();
+        } else {
+          Server.add_text_attachment(data.reportId, err, REPORT_TYPES.CRASH, () => {
+            RNRestart.Restart();
+          })
+        }
+      })
     };
-    setJSExceptionHandler(handleExceptions, this.props.enableCrashReport);
-    setNativeExceptionHandler(handleExceptions(, this.props.enableCrashReport));
+    setJSExceptionHandler(handleExceptions, this.props.enableDevCrashReport);
   }
 
   render() {
@@ -34,8 +51,7 @@ export default class ChictusLytics extends Component {
         {this.state.state === STATES.CRASH && (
           <View style={{width: '100%', height: '100%', justifyContent: 'center', alignContent: 'center'}}>
             <Text style={{textAlign: 'center'}}>
-              مشکلی پیش آمده است!
-              نرم افزار تا چند ثانیه دیگر دوباره اجرا خواهد شد...
+              {"مشکلی پیش آمده است!\n نرم افزار تا چند ثانیه دیگر دوباره اجرا خواهد شد..."}
             </Text>
             <View style={{width: 10, height: 10}}/>
             <ActivityIndicator/>
@@ -46,3 +62,10 @@ export default class ChictusLytics extends Component {
   }
 
 }
+
+ChictusLytics.defaultProps = {
+  enableDevCrashReport: false,
+  enableReleaseShakeToReport: false,
+  extraInformation: () => { return ""},
+  titleExtraInformation: () => { return ""},
+};
